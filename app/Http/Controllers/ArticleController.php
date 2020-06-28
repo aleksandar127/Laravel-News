@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Article;
+use App\Locator;
 use App\Weather;
 use App\Category;
 use App\Traits\ImageUpload;
@@ -31,10 +32,9 @@ class ArticleController extends Controller
 
     {
 
-        $weather =  Weather::getData(Weather::check());
         $articles = Article::allArticles();
         $categories = Category::all();
-        return view('articles.index', ['articles' => $articles, 'categories' => $categories, 'weather' => $weather]);
+        return view('articles.index', ['articles' => $articles, 'categories' => $categories]);
     }
 
     /**

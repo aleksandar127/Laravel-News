@@ -2,33 +2,25 @@
 
 namespace App;
 
+use App\Locator;
 use Illuminate\Support\Facades\Session;
 
 
 class Weather
 {
+    private $loc;
 
-
-    public static function getLocation()
+    public function __construct(Locator $locator)
     {
-
-        if (Session::get('location')) {
-            return Session::get('location');
-        }
-        $query = file_get_contents(config('services.api_key.location') . $_SERVER['REMOTE_ADDR']);
-        $data = json_decode($query, true);
-        if ($_SERVER['REMOTE_ADDR'] === "::1" || $_SERVER['REMOTE_ADDR'] === "127.0.0.1") {
-            $data["city"] = 'Belgrade';
-            session(['location' => $data['city']]);
-            return $data["city"];
-        }
+        $this->loc = $locator->location;
     }
 
-    public static function getData($api)
+    public function getData()
     {
+        $api = $this->check();
         $fileName = '../app/Weather.txt';
         if ($api) {
-            $location = self::getLocation();
+            $location = $this->loc;
             $weather = file_get_contents('http://api.openweathermap.org/data/2.5/weather?q=' . $location . '&units=metric&appid=' . config("services.api_key.weather"));
             session(['weather_time' => time()]);
 
@@ -43,7 +35,7 @@ class Weather
         return $weather;
     }
 
-    public static function check()
+    public function check()
     {
         if (!Session::get('weather_time') || (time() - Session::get('weather_time') > 600)) {
 

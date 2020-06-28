@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\User;
+use App\Locator;
+use App\Weather;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,6 +24,12 @@ class AppServiceProvider extends ServiceProvider
                 $u = new User();
                 return $u->unreadNotifications;
             }
+        });
+
+        $this->app->bind('weather', function ($app) {
+            $locator = new Locator();
+            $weatherObj =  new Weather($locator);
+            return $weatherObj->getData();
         });
     }
 

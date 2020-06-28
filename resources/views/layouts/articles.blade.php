@@ -68,17 +68,30 @@
     <body>
          <script src="/js/app.js"></script>
 
-
+ @inject('weather', 'weather')
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
         <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link" href="{{action('CurrencyController@index')}}">Currency</a></li>
-                   <li class="nav-item"> <a class="nav-link" href="/weather">Weather</a></li>
-                   <li class="nav-item"> <a class="nav-link" href="/article">News</a></li>
+
+
+                    <li class="nav-item">
+                        <img src="https://openweathermap.org/img/wn/{{$weather['weather'][0]['icon']}}@2x.png" class=" h-50">
+                        {{round($weather['main']['temp'])}} C&deg;
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{action('CurrencyController@index')}}">Currency</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/article">News</a>
+                    </li>
                     @auth
-                     <li class="nav-item"><a class="nav-link" href="/myarticles">My Articles</a></li>
-                       <li class="nav-item"> <a class="nav-link" href="/article/create">Create article</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/myarticles">My Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/article/create">Create article</a>
+                        </li>
                     @endauth
 
         </ul>
@@ -91,8 +104,10 @@
     </div>
     <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
-             @inject('notification', 'notification')
-             @guest
+            @inject('notification', 'notification')
+
+
+            @guest
                 <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
             @endguest
@@ -101,7 +116,7 @@
 
                 <li class="nav-item"><a class="nav-link text-danger" id="count" onclick="show()" style="cursor: pointer;">New Articles {{$notification->count()}}</a></li>
 
-             @endauth
+            @endauth
 
 
         </ul>
